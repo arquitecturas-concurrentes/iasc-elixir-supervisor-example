@@ -29,26 +29,21 @@ Stack es un wrapper de una lista.  Nos permite agregar un elemento y obtenerlo u
 Entonces, ahora creamos un supervisor que supervise nuestro proceso Stack.
 
 ```elixir
-defmodule Stack do
-  use GenServer
+defmodule StackSupervisor do
+  use Supervisor
 
-  def start_link(state) do
-    GenServer.start_link(__MODULE__, state, name: __MODULE__)
+  def start_link(init_arg) do
+    Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
   end
 
-  ## Callbacks
+  def init(_init_arg) do
+    children = [
+      {Stack, [:hello]}
+    ]
 
-  def init(stack) do
-    {:ok, stack}
+    Supervisor.init(children, strategy: :one_for_one)
   end
 
-  def handle_call(:pop, _from, [head | tail]) do
-    {:reply, head, tail}
-  end
-
-  def handle_cast({:push, head}, tail) do
-    {:noreply, [head | tail]}
-  end
 end
 ```
 Como registramos a el proceso Stack con ese nombre, lo podemos llamar directamente así, sin obtener su pid.
