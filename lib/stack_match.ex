@@ -1,4 +1,4 @@
-defmodule Stack do
+defmodule StackMatch do
   use GenServer
 
   def start_link(state) do
@@ -11,11 +11,11 @@ defmodule Stack do
     {:ok, stack}
   end
 
-  def handle_call(:pop, _from, [ head | tail]) do
-    { :reply, head , tail }
+  def handle_call(:pop, _from, [head | tail]) do
+    {:reply, head, tail}
   end
 
-  def handle_cast({:push, head}, stack) do
-    { :noreply, [head | stack] }
+  def handle_cast({:push, head}, tail) do
+    {:noreply, [head | tail]}
   end
 end

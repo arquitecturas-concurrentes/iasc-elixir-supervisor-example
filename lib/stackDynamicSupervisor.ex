@@ -9,10 +9,10 @@ defmodule StackDynamicSupervisor do
     DynamicSupervisor.init(strategy: :one_for_one)
   end
 
-  def start_child(id, state) do
+  def start_child(child_name, state) do
     #Ejemplo para agregar stack:
     #{:ok, dynamicStackUnoPid} = StackDynamicSupervisor.start_child(DynamicStackUno, [:hello])
-    spec = {DynamicStack, {id, state} }
+    spec = {DynamicStack, {child_name, state} }
     DynamicSupervisor.start_child(__MODULE__, spec)
   end
 end
