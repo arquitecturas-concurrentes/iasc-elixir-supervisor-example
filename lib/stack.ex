@@ -1,8 +1,8 @@
 defmodule Stack do
   use GenServer
 
-  def start_link(state) do
-    GenServer.start_link(__MODULE__, state, name: __MODULE__)
+  def start_link(state, name) do
+    GenServer.start_link(__MODULE__, state, name: name)
   end
 
   ## Callbacks
@@ -11,11 +11,30 @@ defmodule Stack do
     {:ok, stack}
   end
 
-  def handle_call(:pop, _from, [ head | tail]) do
-    { :reply, head , tail }
+  # async
+  def handle_cast({:push, head}, stack) do
+    { :noreply, [ head | stack ] }
   end
 
-  def handle_cast({:push, head}, stack) do
-    { :noreply, [head | stack] }
+  # has to reply always
+  def handle_call(:pop, _from, [head | tail]) do
+    { :reply, head, tail}
+  end
+
+  def handle_call(:status, _pid, stack) do
+    { :reply, stack, stack }
+  end
+
+  ### helpers
+  def pop() do
+    GenServer.call(Stack, :pop)
+  end
+
+  def stack_status() do
+    GenServer.call(Stack, :status)
+  end
+
+  def push(value) do
+    GenServer.cast(Stack, {:push, value})
   end
 end

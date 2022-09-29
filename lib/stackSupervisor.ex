@@ -7,10 +7,11 @@ defmodule StackSupervisor do
 
   def init(_init_arg) do
     children = [
-      {Stack, [:hello]}
+      %{id: Stack, start: {Stack, :start_link, [[:hola], Stack]}},
+      %{id: Stack2, start: {Stack, :start_link, [[:hola], Stack2]}}
     ]
 
-    Supervisor.init(children, strategy: :one_for_one)
+    Supervisor.init(children, strategy: :one_for_one, max_restarts: 3, max_seconds: 5)
   end
 
 end
