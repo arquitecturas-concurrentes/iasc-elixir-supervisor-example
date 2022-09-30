@@ -6,7 +6,7 @@ defmodule StackDynamicSupervisor do
   end
 
   def init(_init_arg) do
-    DynamicSupervisor.init(strategy: :one_for_one, max_restarts: 4)
+    DynamicSupervisor.init(strategy: :one_for_one, max_restarts: 4, max_seconds: 5)
   end
 
   def start_child(child_name, state) do

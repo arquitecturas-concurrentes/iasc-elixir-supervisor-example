@@ -6,12 +6,13 @@ defmodule DynamicStack do
   end
 
   def child_spec({name, state}) do
-    %{id: name, start: {__MODULE__, :start_link, [name, state]}, type: :worker}
+    %{id: name, start: {__MODULE__, :start_link, [name, state]}, type: :worker, restart: :trasient}
   end
 
   ## Callbacks
 
   def init(stack) do
+    Process.flag(:trap_exit, true)
     {:ok, stack}
   end
 
@@ -25,5 +26,31 @@ defmodule DynamicStack do
 
   def handle_cast({:push, head}, tail) do
     {:noreply, [head | tail]}
+  end
+
+  def handle_cast(:crash, state) do
+    1 / 0
+   { :noreply, state }
+  end
+
+  def terminate(reason, state) do
+    Logger.warn("#{inspect(reason)} in terminate. State was #{inspect(state)}")
+  end
+
+  ### helpers
+  def crash(name_or_pid) do
+    GenServer.call(name_or_pid, :crash)
+  end
+
+  def pop(name_or_pid) do
+    GenServer.call(name_or_pid, :pop)
+  end
+
+  def stack_status(name_or_pid) do
+    GenServer.call(name_or_pid, :status)
+  end
+
+  def push(name_or_pid, value) do
+    GenServer.cast(name_or_pid, {:push, value})
   end
 end

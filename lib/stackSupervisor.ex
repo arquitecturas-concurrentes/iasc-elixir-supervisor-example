@@ -7,11 +7,12 @@ defmodule StackSupervisor do
 
   def init(_init_arg) do
     children = [
-      %{id: Stack, start: {Stack, :start_link, [[:hola], Stack]}},
-      %{id: Stack2, start: {Stack, :start_link, [[:hola], Stack2]}}
+      #%{id: StackAgent, start: {StackAgent, :start_link, [[], StackAgent]}},
+      %{id: Stack, start: {Stack, :start_link, [[], Stack1]}, restart: :transient},
+      %{id: Stack2, start: {Stack, :start_link, [[], Stack2]}, restart: :transient},
+      %{id: Stack3, start: {Stack, :start_link, [[], Stack3]}, restart: :transient}
     ]
 
-    Supervisor.init(children, strategy: :one_for_one, max_restarts: 3, max_seconds: 5)
+    Supervisor.init(children, strategy: :one_for_one, max_restarts: 5, max_seconds: 5)
   end
-
 end
