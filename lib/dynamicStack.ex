@@ -6,7 +6,7 @@ defmodule DynamicStack do
   end
 
   def child_spec({name, state}) do
-    %{id: name, start: {__MODULE__, :start_link, [name, state]}, type: :worker, restart: :trasient}
+    %{id: name, start: {__MODULE__, :start_link, [name, state]}, type: :worker, restart: :transient}
   end
 
   ## Callbacks

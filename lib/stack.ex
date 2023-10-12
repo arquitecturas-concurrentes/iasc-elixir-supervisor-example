@@ -3,19 +3,18 @@ defmodule Stack do
   use GenServer
 
   # punto de entrada para crear el proceso
-  def start(stack, name) do
-    GenServer.start(__MODULE__, stack, name: name)
+  def start(intial_state, name) do
+    GenServer.start(__MODULE__, intial_state, name: name)
   end
 
-  def start_link(stack, name) do
-    GenServer.start_link(__MODULE__, stack, name: name)
+  def start_link(intial_state, name) do
+    GenServer.start_link(__MODULE__, intial_state, name: name)
   end
 
   ## Callbacks
-  def init(stack) do
-    Process.flag(:trap_exit, true)
-    #stack = StackAgent.fecth_status(name)
-    {:ok, stack}
+  def init(intial_state) do
+    # intial_state = StackAgent.fecth_status(name)
+    {:ok, intial_state}
   end
 
   def handle_cast(:crash, state) do
@@ -25,11 +24,13 @@ defmodule Stack do
 
   # async
   def handle_cast({:push, head}, stack) do
+    #  StackAgent.update_status(name,  [ head | stack ])
     { :noreply, [ head | stack ] }
   end
 
   # has to reply always
   def handle_call(:pop, _from, [head | tail]) do
+    #  StackAgent.update_status(name,  tail)
     { :reply, head, tail }
   end
 

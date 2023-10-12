@@ -2,12 +2,12 @@ defmodule Crashy do
   require Logger
   use GenServer
 
-  def start(state, name) do
-    GenServer.start(__MODULE__, state, name: name)
+  def start(state) do
+    GenServer.start(__MODULE__, state)
   end
   
-  def start_link(state, name) do
-    GenServer.start_link(__MODULE__, state, name: name)
+  def start_link(state) do
+    GenServer.start_link(__MODULE__, state)
   end
 
   ## Callbacks
@@ -21,6 +21,11 @@ defmodule Crashy do
   # async
   def handle_cast(:crash, state) do
      1 / 0
+    { :noreply, state }
+  end
+
+  def handle_cast({:div,n}, state) do
+    1 / n
     { :noreply, state }
   end
 

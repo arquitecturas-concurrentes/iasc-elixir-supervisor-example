@@ -1,3 +1,28 @@
+# Errores
+
+spawn(fn -> receive do :crash -> raise "boom" end end)
+pid = pid(0,117,0)
+Process.info(pid, :links)
+
+send(pid, :crash)
+
+
+{pid, ref} = spawn_monitor(fn -> receive do :crash -> raise "boom" end end)
+
+iex(9)> Process.info(self, :monitors)
+{:monitors, [process: #PID<0.118.0>]}
+
+Process.monitor(pid)
+
+iex(1)> Crashy.start([], Crashy)
+{:ok, #PID<0.158.0>}
+iex(2)> pid = pid(0,158,0)
+#PID<0.158.0>
+iex(3)> Process.monitor(pid)
+#Reference<0.3021007040.111149059.36924>
+
+Crashy.break(pid)
+
 # Ejemplo de supervisor statico y dinamico
 
 Para poder crear un supervisor, primero necesitamos crear un proceso hijo al que supervisar. Vamos a definir un GenServer que representa un stack:
