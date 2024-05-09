@@ -13,6 +13,7 @@ defmodule Stack do
 
   ## Callbacks
   def init(intial_state) do
+    Process.flag(:trap_exit, true)
     # intial_state = StackAgent.fecth_status(name)
     {:ok, intial_state}
   end

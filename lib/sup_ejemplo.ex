@@ -10,7 +10,7 @@ defmodule SupEjemplo.Application do
     ]
 
     #El Iasc_sup_ej.Supervisor seria el supervisor de supervisores
-    opts = [strategy: :one_for_one, name: Sup_ejemplo.Supervisor, max_seconds: 5, max_restarts: 3]
+    opts = [strategy: :one_for_one, name: Sup_ejemplo.SupervisorDeSupervisores, max_seconds: 5, max_restarts: 3]
     Supervisor.start_link(children, opts)
   end
 

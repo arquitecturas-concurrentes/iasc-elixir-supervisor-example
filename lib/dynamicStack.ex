@@ -1,12 +1,12 @@
 defmodule DynamicStack do
   use GenServer
 
-  def start_link(name, state) do
-    GenServer.start_link(__MODULE__, state, name: name)
+  def start_link(state) do
+    GenServer.start_link(__MODULE__, state)
   end
 
   def child_spec({name, state}) do
-    %{id: name, start: {__MODULE__, :start_link, [name, state]}, type: :worker, restart: :transient}
+    %{id: name, start: {__MODULE__, :start_link, [state]}, type: :worker, restart: :transient}
   end
 
   ## Callbacks

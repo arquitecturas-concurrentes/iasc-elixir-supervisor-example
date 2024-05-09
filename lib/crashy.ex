@@ -35,11 +35,22 @@ defmodule Crashy do
     {:stop, reason, state}
   end
 
+  def handle_info({:blah, pid}, state) do
+    Logger.info("Recibi un mensaje de #{inspect(pid)}.")
+    {:noreply, state}
+  end
+
+  ## de uso
+
   def terminate(reason, _state) do
     Logger.warn("#{inspect(reason)} in terminate")
   end
   
   def break(pid) do
    GenServer.cast(pid, :crash)
+  end
+
+  def blah(pid) do
+    send(pid, {:blah, self})
   end
 end
