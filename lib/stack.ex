@@ -13,9 +13,8 @@ defmodule Stack do
 
   ## Callbacks
   def init(intial_state) do
-    Process.flag(:trap_exit, true)
     # intial_state = StackAgent.fecth_status(name)
-    {:ok, intial_state}
+    {:ok, {name, intial_state}}
   end
 
   def handle_cast(:crash, state) do
@@ -39,9 +38,14 @@ defmodule Stack do
     { :reply, stack, stack }
   end
 
+  def handle_info({:quit, reason}, state) do
+    IO.inspect(":quit received, updating state to: #{state}")
+    {:stop, reason, state}
+  end
+
   def terminate(reason, state) do
     Logger.warn("#{inspect(reason)} in terminate. State was #{inspect(state)}")
-    #StackAgent.update(name, state)
+    # StackAgent.update(name, state)
   end
 
   ### helpers
@@ -51,6 +55,10 @@ defmodule Stack do
 
   def pop(name_or_pid) do
     GenServer.call(name_or_pid, :pop)
+  end
+
+  def stop(name_or_pid) do
+    send(name_or_pid, {:quit, :normal})
   end
 
   def stack_status(name_or_pid) do
