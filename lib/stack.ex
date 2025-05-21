@@ -14,7 +14,7 @@ defmodule Stack do
   ## Callbacks
   def init(intial_state) do
     # intial_state = StackAgent.fecth_status(name)
-    {:ok, {name, intial_state}}
+    {:ok, {intial_state}}
   end
 
   def handle_cast(:crash, state) do
@@ -44,7 +44,7 @@ defmodule Stack do
   end
 
   def terminate(reason, state) do
-    Logger.warn("#{inspect(reason)} in terminate. State was #{inspect(state)}")
+    Logger.warning("#{inspect(reason)} in terminate. State was #{inspect(state)}")
     # StackAgent.update(name, state)
   end
 

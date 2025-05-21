@@ -8,6 +8,7 @@ defmodule ExternalExit do
   end
 
   # dispatch de send
+  @impl true
   def handle_info(:trap, state) do
     Logger.info("recibi mensaje para setear trap_exit en true")
     Process.flag(:trap_exit, true)

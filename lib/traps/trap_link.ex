@@ -19,8 +19,9 @@ defmodule TrapLink do
     {:noreply, state}
   end
 
+  @impl true
   def handle_cast(:crash, state) do
-    1 / 0
+    _res = 1 / 0
    { :noreply, state }
  end
 
