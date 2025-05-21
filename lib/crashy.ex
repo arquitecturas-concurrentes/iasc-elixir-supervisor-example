@@ -9,7 +9,7 @@ defmodule Crashy do
   def start_link(state) do
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
   end
-  
+
   def start_link(state, name) do
     GenServer.start_link(__MODULE__, state, name: name)
   end
@@ -23,12 +23,12 @@ defmodule Crashy do
 
   # async
   def handle_cast(:crash, state) do
-     1 / 0
+     _res = 1 / 0
     { :noreply, state }
   end
 
   def handle_cast({:div,n}, state) do
-    1 / n
+    _res = 1 / n
     { :noreply, state }
   end
 
@@ -40,8 +40,8 @@ defmodule Crashy do
   end
 
   #senial EXIT -> {'EXIT', From, Reason}
-  def handle_info({'EXIT', pid, reason}, state) do
-    Logger.warn("Pid-#{inspect(pid)} :#{inspect(reason)} in handle_info")
+  def handle_info({"EXIT", pid, reason}, state) do
+    Logger.warning("Pid-#{inspect(pid)} :#{inspect(reason)} in handle_info")
     {:stop, reason, state}
   end
 
@@ -61,7 +61,7 @@ defmodule Crashy do
   def terminate(reason, _state) do
     Logger.info("#{inspect(reason)} in terminate")
   end
-  
+
   def break(pid) do
    GenServer.cast(pid, :crash)
   end

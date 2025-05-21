@@ -1,4 +1,5 @@
 defmodule DynamicStack do
+  require Logger
   use GenServer
 
   def start_link(state) do
@@ -34,12 +35,12 @@ defmodule DynamicStack do
   end
 
   def handle_cast(:crash, state) do
-    1 / 0
+    _res = 1 / 0
    { :noreply, state }
   end
 
   def terminate(reason, state) do
-    Logger.warn("#{inspect(reason)} in terminate. State was #{inspect(state)}")
+    Logger.warning("#{inspect(reason)} in terminate. State was #{inspect(state)}")
   end
 
   ### helpers
