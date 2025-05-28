@@ -2,6 +2,10 @@ defmodule Crashy do
   require Logger
   use GenServer
 
+  def start(state) do
+    GenServer.start(__MODULE__, state, name: __MODULE__)
+  end
+
   def start(state, name) do
     GenServer.start(__MODULE__, state, name: name)
   end
@@ -40,6 +44,7 @@ defmodule Crashy do
   end
 
   #senial EXIT -> {'EXIT', From, Reason}
+  #shutdown
   def handle_info({"EXIT", pid, reason}, state) do
     Logger.warning("Pid-#{inspect(pid)} :#{inspect(reason)} in handle_info")
     {:stop, reason, state}
@@ -52,6 +57,7 @@ defmodule Crashy do
 
   def handle_info(:parar, state) do
     Logger.info("Recibi un mensaje de parar.")
+    GenServer.stop(self(), :normal)
     {:stop, :normal, state}
   end
 
@@ -69,10 +75,16 @@ defmodule Crashy do
   def blah(pid) do
     send(pid, {:blah, self()})
   end
+
+  def parar(pid) do
+    send(pid, :parar)
+  end
 end
 
 
+
 # spawn(fn -> receive do :crash -> raise "boom" end end)
+
 # pid = pid(0,117,0)
 # Process.info(pid, :links)
 
