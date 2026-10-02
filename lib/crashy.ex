@@ -57,16 +57,16 @@ defmodule Crashy do
 
   def handle_info(:parar, state) do
     Logger.info("Recibi un mensaje de parar.")
-    GenServer.stop(self(), :normal)
+    #GenServer.stop(self(), :normal)
     {:stop, :normal, state}
   end
-
-  ## de uso
 
   # Callback que se llama cuando se esta por terminar el proceso de Genserver.
   def terminate(reason, _state) do
     Logger.info("#{inspect(reason)} in terminate")
   end
+
+  ## de uso
 
   def break(pid) do
    GenServer.cast(pid, :crash)

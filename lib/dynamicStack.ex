@@ -11,6 +11,7 @@ defmodule DynamicStack do
   end
 
   # por convencion se debe llamar child_spec
+  # child_spec/1 es llamado por el DynamicSupervisor para obtener la especificacion del proceso hijo
   def child_spec({name, state, restart_type}) do
     %{id: name, start: {__MODULE__, :start_link, [state, name]}, type: :worker, restart: restart_type}
   end
